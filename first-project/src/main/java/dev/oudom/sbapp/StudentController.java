@@ -8,6 +8,6 @@ public class StudentController {
 
     @GetMapping("/koko")
     public Student getStudent() {
-        return new Student("ISTAD-001", "Ko Ko ", "Male", 11.11);
+        return new Student("ISTAD-001", "Ko Ko", "Male", 11.11);
     }
 }
