@@ -1,4 +1,4 @@
-package dev.oudom.sbapp;
+package dev.oudom.sbapp.annotationbean;
 
 import lombok.Getter;
 import org.springframework.context.annotation.Scope;

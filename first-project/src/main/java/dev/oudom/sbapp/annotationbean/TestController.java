@@ -1,4 +1,4 @@
-package dev.oudom.sbapp;
+package dev.oudom.sbapp.annotationbean;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

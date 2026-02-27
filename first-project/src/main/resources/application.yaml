@@ -1,5 +1,7 @@
 spring:
   application:
     name: first-project
-server:
-  port: 8090
+  profiles:
+    active: prod
+  main:
+    banner-mode: off
