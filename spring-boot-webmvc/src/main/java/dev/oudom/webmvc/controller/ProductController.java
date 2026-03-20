@@ -4,8 +4,10 @@ import dev.oudom.webmvc.dto.CreateProductRequest;
 import dev.oudom.webmvc.dto.ProductResponse;
 import dev.oudom.webmvc.dto.UpdateProductRequest;
 import dev.oudom.webmvc.service.ProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,9 +22,11 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public List<ProductResponse> getProducts() {
+    public Page<ProductResponse> getProducts(
+            @RequestParam(required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(required = false, defaultValue = "10") int pageSize) {
         log.info("getProducts");
-        return List.of();
+        return productService.getProducts(pageNumber, pageSize);
     }
 
     @GetMapping("/{code}")
@@ -33,7 +37,7 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductResponse createNew(@RequestBody CreateProductRequest createProductRequest) {
+    public ProductResponse createNew(@Valid @RequestBody CreateProductRequest createProductRequest) {
         log.info("createProductRequest: {}", createProductRequest);
         return productService.createProduct(createProductRequest);
     }

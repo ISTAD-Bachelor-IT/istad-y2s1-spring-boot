@@ -2,10 +2,9 @@ package dev.oudom.webmvc.service;
 
 import dev.oudom.webmvc.dto.CreateProductRequest;
 import dev.oudom.webmvc.dto.ProductResponse;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface ProductService {
     ProductResponse createProduct(CreateProductRequest createProductRequest);
-    List<ProductResponse> getProducts();
+    Page<ProductResponse> getProducts(int pageNumber, int pageSize);
 }

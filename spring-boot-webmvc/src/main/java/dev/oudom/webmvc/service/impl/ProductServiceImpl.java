@@ -9,9 +9,12 @@ import dev.oudom.webmvc.repository.CategoryRepository;
 import dev.oudom.webmvc.repository.ProductRepository;
 import dev.oudom.webmvc.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -24,13 +27,38 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse createProduct(CreateProductRequest createProductRequest) {
 
-        Category category = categoryRepository.findCategoryByName(createProductRequest.category());
+        Category category = categoryRepository.findById(createProductRequest.categoryId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
 
         Product product = productMapper.toProduct(createProductRequest);
-        product.setCode("P-" + UUID.randomUUID());
+        product.setCode(generateProductCode());
+        product.setIsAvailable(true);
         product.setCategory(category);
         productRepository.save(product);
 
         return productMapper.fromProduct(product);
+    }
+
+    @Override
+    public Page<ProductResponse> getProducts(int pageNumber, int pageSize) {
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
+        return productRepository.findAll(pageable).map(productMapper::fromProduct);
+    }
+
+
+    private String generateProductCode() {
+        final String prefix = "ITP-PRO-";
+
+        int nextSequence = productRepository.findTopByOrderByCodeDesc()
+                .map(Product::getCode)
+                .filter(code -> code.startsWith(prefix))
+                .map(code -> code.substring(prefix.length()))
+                .map(Integer::parseInt)
+                .map(sequence -> sequence + 1)
+                .orElse(1);
+
+        return "%s%03d".formatted(prefix, nextSequence);
     }
 }

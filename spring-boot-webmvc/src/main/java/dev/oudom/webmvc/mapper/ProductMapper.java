@@ -9,8 +9,12 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
 
-    @Mapping(source = "category", target = "category.name")
+    @Mapping(target = "code", ignore = true)
+    @Mapping(target = "isAvailable", ignore = true)
+    @Mapping(target = "category", ignore = true)
+    @Mapping(target = "orderLines", ignore = true)
     Product toProduct(CreateProductRequest createProductRequest);
 
+    @Mapping(source = "category.name", target = "categoryName")
     ProductResponse fromProduct(Product product);
 }
