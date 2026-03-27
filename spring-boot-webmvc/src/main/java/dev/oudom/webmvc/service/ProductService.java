@@ -8,4 +8,5 @@ public interface ProductService {
     ProductResponse createProduct(CreateProductRequest createProductRequest);
     Page<ProductResponse> getProducts(int pageNumber, int pageSize);
     ProductResponse getProductByCode(String code);
+    void deleteProductByCode(String code);
 }

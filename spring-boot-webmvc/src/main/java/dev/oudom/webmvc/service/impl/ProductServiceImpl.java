@@ -16,8 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
@@ -54,6 +52,13 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findProductByCode(code)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product Code not found"));
         return productMapper.fromProduct(product);
+    }
+
+    @Override
+    public void deleteProductByCode(String code) {
+        Product product = productRepository.findProductByCode(code)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product Code not found"));
+        productRepository.delete(product);
     }
 
 

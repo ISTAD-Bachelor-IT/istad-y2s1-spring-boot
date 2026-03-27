@@ -61,9 +61,11 @@ public class ProductController {
         return null;
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{code}")
     public void deleteByCode(@PathVariable String code) {
         log.info("deleteByCode: {}", code);
+        productService.deleteProductByCode(code);
     }
 
 }
