@@ -4,6 +4,7 @@ import dev.oudom.webmvc.domain.Category;
 import dev.oudom.webmvc.domain.Product;
 import dev.oudom.webmvc.dto.CreateProductRequest;
 import dev.oudom.webmvc.dto.ProductResponse;
+import dev.oudom.webmvc.dto.UpdateProductRequest;
 import dev.oudom.webmvc.mapper.ProductMapper;
 import dev.oudom.webmvc.repository.CategoryRepository;
 import dev.oudom.webmvc.repository.ProductRepository;
@@ -50,7 +51,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse getProductByCode(String code) {
         Product product = productRepository.findProductByCode(code)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product Code not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product code not found"));
         return productMapper.fromProduct(product);
     }
 
@@ -59,6 +60,15 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findProductByCode(code)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product Code not found"));
         productRepository.delete(product);
+    }
+
+    @Override
+    public ProductResponse updateByCode(UpdateProductRequest updateProductRequest, String code) {
+        Product product = productRepository.findById(code)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product code not found"));
+        productMapper.fromUpdateProductRequest(updateProductRequest, product);
+        productRepository.save(product);
+        return productMapper.fromProduct(product);
     }
 
 

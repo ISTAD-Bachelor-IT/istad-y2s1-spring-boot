@@ -3,8 +3,10 @@ package dev.oudom.webmvc.mapper;
 import dev.oudom.webmvc.domain.Product;
 import dev.oudom.webmvc.dto.CreateProductRequest;
 import dev.oudom.webmvc.dto.ProductResponse;
+import dev.oudom.webmvc.dto.UpdateProductRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
@@ -17,4 +19,10 @@ public interface ProductMapper {
 
     @Mapping(source = "category.name", target = "categoryName")
     ProductResponse fromProduct(Product product);
+
+    @Mapping(target = "code", ignore = true)
+    @Mapping(target = "isAvailable", ignore = true)
+    @Mapping(target = "category", ignore = true)
+    @Mapping(target = "orderLines", ignore = true)
+    Product fromUpdateProductRequest(UpdateProductRequest updateProductRequest, @MappingTarget Product product);
 }

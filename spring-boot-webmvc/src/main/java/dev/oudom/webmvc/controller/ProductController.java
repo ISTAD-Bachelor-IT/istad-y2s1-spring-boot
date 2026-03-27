@@ -11,8 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
@@ -44,10 +42,10 @@ public class ProductController {
 
     @PutMapping("/{code}")
     public ProductResponse updateByCode(
-            @RequestBody UpdateProductRequest updateProductRequest,
+            @Valid @RequestBody UpdateProductRequest updateProductRequest,
             @PathVariable String code) {
         log.info("updateByCode: {} and code: {}", updateProductRequest, code);
-        return null;
+        return productService.updateByCode(updateProductRequest, code);
     }
 
     @PatchMapping("/{code}")
