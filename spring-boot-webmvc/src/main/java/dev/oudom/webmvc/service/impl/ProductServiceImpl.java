@@ -16,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
@@ -45,6 +47,13 @@ public class ProductServiceImpl implements ProductService {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
 
         return productRepository.findAll(pageable).map(productMapper::fromProduct);
+    }
+
+    @Override
+    public ProductResponse getProductByCode(String code) {
+        Product product = productRepository.findProductByCode(code)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product Code not found"));
+        return productMapper.fromProduct(product);
     }
 
 

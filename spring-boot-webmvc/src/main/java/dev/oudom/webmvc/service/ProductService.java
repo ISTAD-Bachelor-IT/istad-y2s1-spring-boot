@@ -7,4 +7,5 @@ import org.springframework.data.domain.Page;
 public interface ProductService {
     ProductResponse createProduct(CreateProductRequest createProductRequest);
     Page<ProductResponse> getProducts(int pageNumber, int pageSize);
+    ProductResponse getProductByCode(String code);
 }

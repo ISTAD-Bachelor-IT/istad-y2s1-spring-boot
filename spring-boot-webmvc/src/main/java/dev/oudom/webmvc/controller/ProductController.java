@@ -32,7 +32,7 @@ public class ProductController {
     @GetMapping("/{code}")
     public ProductResponse getByCode(@PathVariable String code) {
         log.info("getByCode");
-        return null;
+        return productService.getProductByCode(code);
     }
 
     @PostMapping
