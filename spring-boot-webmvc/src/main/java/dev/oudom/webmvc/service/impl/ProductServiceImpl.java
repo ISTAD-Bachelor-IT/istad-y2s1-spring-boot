@@ -3,6 +3,7 @@ package dev.oudom.webmvc.service.impl;
 import dev.oudom.webmvc.domain.Category;
 import dev.oudom.webmvc.domain.Product;
 import dev.oudom.webmvc.dto.CreateProductRequest;
+import dev.oudom.webmvc.dto.PatchProductRequest;
 import dev.oudom.webmvc.dto.ProductResponse;
 import dev.oudom.webmvc.dto.UpdateProductRequest;
 import dev.oudom.webmvc.mapper.ProductMapper;
@@ -31,13 +32,13 @@ public class ProductServiceImpl implements ProductService {
         Category category = categoryRepository.findById(createProductRequest.categoryId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
 
-        Product product = productMapper.toProduct(createProductRequest);
+        Product product = productMapper.createProductRequestToProduct(createProductRequest);
         product.setCode(generateProductCode());
         product.setIsAvailable(true);
         product.setCategory(category);
         productRepository.save(product);
 
-        return productMapper.fromProduct(product);
+        return productMapper.productToProductResponse(product);
     }
 
     @Override
@@ -45,14 +46,14 @@ public class ProductServiceImpl implements ProductService {
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
 
-        return productRepository.findAll(pageable).map(productMapper::fromProduct);
+        return productRepository.findAll(pageable).map(productMapper::productToProductResponse);
     }
 
     @Override
     public ProductResponse getProductByCode(String code) {
         Product product = productRepository.findProductByCode(code)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product code not found"));
-        return productMapper.fromProduct(product);
+        return productMapper.productToProductResponse(product);
     }
 
     @Override
@@ -66,9 +67,18 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponse updateByCode(UpdateProductRequest updateProductRequest, String code) {
         Product product = productRepository.findById(code)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product code not found"));
-        productMapper.fromUpdateProductRequest(updateProductRequest, product);
+        productMapper.fromUpdateProductRequestToProduct(updateProductRequest, product);
         productRepository.save(product);
-        return productMapper.fromProduct(product);
+        return productMapper.productToProductResponse(product);
+    }
+
+    @Override
+    public ProductResponse patchByCode(String code, PatchProductRequest patchProductRequest) {
+        Product product = productRepository.findById(code)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product code not found"));
+        productMapper.fromPatchProductRequestToProduct(patchProductRequest, product);
+        productRepository.save(product);
+        return productMapper.productToProductResponse(product);
     }
 
 

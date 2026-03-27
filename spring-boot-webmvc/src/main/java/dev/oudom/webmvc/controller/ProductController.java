@@ -1,6 +1,7 @@
 package dev.oudom.webmvc.controller;
 
 import dev.oudom.webmvc.dto.CreateProductRequest;
+import dev.oudom.webmvc.dto.PatchProductRequest;
 import dev.oudom.webmvc.dto.ProductResponse;
 import dev.oudom.webmvc.dto.UpdateProductRequest;
 import dev.oudom.webmvc.service.ProductService;
@@ -51,12 +52,9 @@ public class ProductController {
     @PatchMapping("/{code}")
     public ProductResponse patchByCode(
             @PathVariable String code,
-            @RequestBody UpdateProductRequest updateProductRequest
-    ) {
-        log.info("patchByCode: {} and code: {}",
-                updateProductRequest,
-                code);
-        return null;
+            @RequestBody PatchProductRequest patchProductRequest) {
+        log.info("patchByCode: {} and code: {}", patchProductRequest, code);
+        return productService.patchByCode(code, patchProductRequest);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
