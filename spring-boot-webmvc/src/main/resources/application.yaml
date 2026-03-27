@@ -3,7 +3,7 @@ spring:
     name: spring-boot-webmvc
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/e1_ecommerce
+    url: jdbc:postgresql://localhost:5431/e1_ecommerce
     username: postgres
     password: 123
   jpa:
